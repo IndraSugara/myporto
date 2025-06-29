@@ -90,9 +90,30 @@ try {
                         Download CV
                     </a>
                     <div class="hero-audio-player">
-                        <div class="audio-player-container">
+                        <div class="audio-player-container" id="audioPlayerContainer">
                             <div class="audio-player-header">Background Music</div>
-                            <audio id="bg-music" controls>
+                            <div class="custom-audio-player">
+                                <div class="audio-controls">
+                                    <button class="play-pause-btn" id="playPauseBtn">
+                                        <i class="bx bx-play"></i>
+                                    </button>
+                                    <div class="audio-info">
+                                        <div class="audio-title">Chill Vibes</div>
+                                        <div class="audio-artist">Portfolio Theme</div>
+                                    </div>
+                                    <button class="volume-control" id="volumeBtn">
+                                        <i class="bx bx-volume-full"></i>
+                                    </button>
+                                </div>
+                                <div class="progress-container" id="progressContainer">
+                                    <div class="progress-bar" id="progressBar"></div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="currentTime">0:00</span>
+                                    <span id="duration">0:00</span>
+                                </div>
+                            </div>
+                            <audio id="bg-music" preload="metadata">
                                 <source src="assets/musics/bgmusic.mp3" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
@@ -270,11 +291,30 @@ try {
         <div class="portfolio-grid">
           <?php if (!empty($portfolio_items)): ?>
             <?php foreach ($portfolio_items as $portfolio_item): ?>
-              <div class="portfolio-item">
+              <div class="portfolio-item" data-project-url="<?php echo htmlspecialchars($portfolio_item['project_url'] ?? '#'); ?>" data-github-url="<?php echo htmlspecialchars($portfolio_item['github_url'] ?? '#'); ?>">
                 <img src="<?php echo htmlspecialchars($portfolio_item['image_url']); ?>" alt="<?php echo htmlspecialchars($portfolio_item['title']); ?>">
                 <div class="portfolio-overlay">
-                  <h3><?php echo htmlspecialchars($portfolio_item['title']); ?></h3>
-                  <p><?php echo htmlspecialchars($portfolio_item['description']); ?></p>
+                  <div class="portfolio-content">
+                    <h3><?php echo htmlspecialchars($portfolio_item['title']); ?></h3>
+                    <p><?php echo htmlspecialchars($portfolio_item['description']); ?></p>
+                    <?php if (!empty($portfolio_item['technologies'])): ?>
+                      <div class="portfolio-tech">
+                        <span><?php echo htmlspecialchars($portfolio_item['technologies']); ?></span>
+                      </div>
+                    <?php endif; ?>
+                    <div class="portfolio-actions">
+                      <?php if (!empty($portfolio_item['project_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($portfolio_item['project_url']); ?>" class="portfolio-btn" target="_blank" onclick="event.stopPropagation()">
+                          <i class="bx bx-link-external"></i> Demo
+                        </a>
+                      <?php endif; ?>
+                      <?php if (!empty($portfolio_item['github_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($portfolio_item['github_url']); ?>" class="portfolio-btn" target="_blank" onclick="event.stopPropagation()">
+                          <i class="bx bxl-github"></i> Code
+                        </a>
+                      <?php endif; ?>
+                    </div>
+                  </div>
                 </div>
               </div>
             <?php endforeach; ?>
