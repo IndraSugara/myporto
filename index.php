@@ -270,11 +270,30 @@ try {
         <div class="portfolio-grid">
           <?php if (!empty($portfolio_items)): ?>
             <?php foreach ($portfolio_items as $portfolio_item): ?>
-              <div class="portfolio-item">
+              <div class="portfolio-item" data-project-url="<?php echo htmlspecialchars($portfolio_item['project_url'] ?? '#'); ?>" data-github-url="<?php echo htmlspecialchars($portfolio_item['github_url'] ?? '#'); ?>">
                 <img src="<?php echo htmlspecialchars($portfolio_item['image_url']); ?>" alt="<?php echo htmlspecialchars($portfolio_item['title']); ?>">
                 <div class="portfolio-overlay">
-                  <h3><?php echo htmlspecialchars($portfolio_item['title']); ?></h3>
-                  <p><?php echo htmlspecialchars($portfolio_item['description']); ?></p>
+                  <div class="portfolio-content">
+                    <h3><?php echo htmlspecialchars($portfolio_item['title']); ?></h3>
+                    <p><?php echo htmlspecialchars($portfolio_item['description']); ?></p>
+                    <?php if (!empty($portfolio_item['technologies'])): ?>
+                      <div class="portfolio-tech">
+                        <span><?php echo htmlspecialchars($portfolio_item['technologies']); ?></span>
+                      </div>
+                    <?php endif; ?>
+                    <div class="portfolio-actions">
+                      <?php if (!empty($portfolio_item['project_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($portfolio_item['project_url']); ?>" class="portfolio-btn" target="_blank" onclick="event.stopPropagation()">
+                          <i class="bx bx-link-external"></i> Demo
+                        </a>
+                      <?php endif; ?>
+                      <?php if (!empty($portfolio_item['github_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($portfolio_item['github_url']); ?>" class="portfolio-btn" target="_blank" onclick="event.stopPropagation()">
+                          <i class="bx bxl-github"></i> Code
+                        </a>
+                      <?php endif; ?>
+                    </div>
+                  </div>
                 </div>
               </div>
             <?php endforeach; ?>
