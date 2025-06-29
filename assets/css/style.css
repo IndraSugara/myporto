@@ -2397,13 +2397,13 @@ audio#bg-music::-webkit-media-controls-time-remaining-display {
     display: block;
   }
 
-  .nav-menu {
+    .nav-menu {
     position: fixed;
     top: 70px;
     left: -100%;
     width: 100%;
     height: calc(100vh - 70px);
-    background: #fff;
+    background: #000;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -2411,6 +2411,7 @@ audio#bg-music::-webkit-media-controls-time-remaining-display {
     transition: left 0.3s ease;
     z-index: 999;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
   }
 
   body.dark-mode .nav-menu {
