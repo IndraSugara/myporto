@@ -1,6 +1,6 @@
 <?php
 try {
-    $pdo = new PDO("sqlite:" . __DIR__ . "/portfolio.db");
+    $pdo = new PDO("sqlite:database/portfolio.db");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Drop and recreate profile table to fix structure
