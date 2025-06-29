@@ -91,15 +91,15 @@ try {
                     </a>
                     <div class="hero-audio-player">
                         <div class="audio-player-container" id="audioPlayerContainer">
-                            <div class="audio-player-header">Background Music</div>
+                            <div class="audio-player-header">Great Nostalgic Music</div>
                             <div class="custom-audio-player">
                                 <div class="audio-controls">
                                     <button class="play-pause-btn" id="playPauseBtn">
                                         <i class="bx bx-play"></i>
                                     </button>
                                     <div class="audio-info">
-                                        <div class="audio-title">Chill Vibes</div>
-                                        <div class="audio-artist">Portfolio Theme</div>
+                                        <div class="audio-title">Left Vibes</div>
+                                        <div class="audio-artist">Leftists Theme</div>
                                     </div>
                                     <button class="volume-control" id="volumeBtn">
                                         <i class="bx bx-volume-full"></i>
