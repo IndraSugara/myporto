@@ -1,126 +1,251 @@
+
 document.addEventListener("DOMContentLoaded", function () {
   const audioPlayer = document.getElementById("bg-music");
-  const playerContainer = document.querySelector(".audio-player-container");
+  const playerContainer = document.getElementById("audioPlayerContainer");
+  const playPauseBtn = document.getElementById("playPauseBtn");
+  const volumeBtn = document.getElementById("volumeBtn");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressBar = document.getElementById("progressBar");
+  const currentTimeEl = document.getElementById("currentTime");
+  const durationEl = document.getElementById("duration");
 
-  // Enhanced audio player functionality
-  if (audioPlayer && playerContainer) {
-    // Auto-minimize player when not playing
-    audioPlayer.addEventListener("pause", function () {
-      playerContainer.style.opacity = "0.7";
-      playerContainer.style.transform = "scale(0.9)";
-    });
+  let isPlaying = false;
+  let isMuted = false;
+  let currentVolume = 0.7;
 
-    audioPlayer.addEventListener("play", function () {
-      playerContainer.style.opacity = "1";
-      playerContainer.style.transform = "scale(1)";
+  if (!audioPlayer || !playerContainer) return;
 
-      // Add pulsing effect while playing
-      playerContainer.classList.add("playing");
-    });
+  // Initialize audio player
+  audioPlayer.volume = currentVolume;
+  audioPlayer.addEventListener('loadedmetadata', updateDuration);
+  audioPlayer.addEventListener('timeupdate', updateProgress);
+  audioPlayer.addEventListener('ended', handleAudioEnd);
 
-    // Volume control with scroll
-    playerContainer.addEventListener(
-      "wheel",
-      function (e) {
-        e.preventDefault();
-        const currentVolume = audioPlayer.volume;
+  // Play/Pause functionality
+  playPauseBtn.addEventListener('click', togglePlayPause);
 
-        if (e.deltaY < 0 && currentVolume < 1) {
-          audioPlayer.volume = Math.min(1, currentVolume + 0.1);
-        } else if (e.deltaY > 0 && currentVolume > 0) {
-          audioPlayer.volume = Math.max(0, currentVolume - 0.1);
-        }
-
-        // Show volume indicator
-        showVolumeIndicator(Math.round(audioPlayer.volume * 100));
-      },
-      { passive: false }
-    ); // Keep as non-passive since we need preventDefault
-
-    // Double click to toggle minimized state
-    let isMinimized = false;
-    playerContainer.addEventListener("dblclick", function () {
-      if (isMinimized) {
-        playerContainer.style.width = "auto";
-        playerContainer.style.height = "auto";
-        document.querySelector(".audio-player-header").style.display = "block";
-        audioPlayer.style.display = "block";
-        isMinimized = false;
-      } else {
-        playerContainer.style.width = "60px";
-        playerContainer.style.height = "60px";
-        document.querySelector(".audio-player-header").style.display = "none";
-        audioPlayer.style.display = "none";
-        isMinimized = true;
-      }
-    });
-
-    // Save volume preference
-    audioPlayer.addEventListener("volumechange", function () {
-      localStorage.setItem("audioVolume", audioPlayer.volume);
-    });
-
-    // Load saved volume
-    const savedVolume = localStorage.getItem("audioVolume");
-    if (savedVolume) {
-      audioPlayer.volume = parseFloat(savedVolume);
+  function togglePlayPause() {
+    if (isPlaying) {
+      audioPlayer.pause();
+      playPauseBtn.innerHTML = '<i class="bx bx-play"></i>';
+      playerContainer.classList.remove('playing');
+      isPlaying = false;
+    } else {
+      audioPlayer.play().then(() => {
+        playPauseBtn.innerHTML = '<i class="bx bx-pause"></i>';
+        playerContainer.classList.add('playing');
+        isPlaying = true;
+      }).catch(e => {
+        console.log('Error playing audio:', e);
+        showAudioNotification('Unable to play audio', 'error');
+      });
     }
   }
 
+  // Volume control
+  volumeBtn.addEventListener('click', toggleMute);
+
+  function toggleMute() {
+    if (isMuted) {
+      audioPlayer.volume = currentVolume;
+      volumeBtn.innerHTML = '<i class="bx bx-volume-full"></i>';
+      isMuted = false;
+    } else {
+      currentVolume = audioPlayer.volume;
+      audioPlayer.volume = 0;
+      volumeBtn.innerHTML = '<i class="bx bx-volume-mute"></i>';
+      isMuted = true;
+    }
+  }
+
+  // Progress bar functionality
+  progressContainer.addEventListener('click', setProgress);
+
+  function setProgress(e) {
+    const width = this.clientWidth;
+    const clickX = e.offsetX;
+    const duration = audioPlayer.duration;
+    audioPlayer.currentTime = (clickX / width) * duration;
+  }
+
+  function updateProgress() {
+    const { duration, currentTime } = audioPlayer;
+    const progressPercent = (currentTime / duration) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    
+    currentTimeEl.textContent = formatTime(currentTime);
+  }
+
+  function updateDuration() {
+    durationEl.textContent = formatTime(audioPlayer.duration);
+  }
+
+  function handleAudioEnd() {
+    playPauseBtn.innerHTML = '<i class="bx bx-play"></i>';
+    playerContainer.classList.remove('playing');
+    progressBar.style.width = '0%';
+    isPlaying = false;
+  }
+
+  function formatTime(time) {
+    if (isNaN(time)) return '0:00';
+    
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  // Enhanced volume control with mouse wheel
+  playerContainer.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    const volumeChange = e.deltaY > 0 ? -0.1 : 0.1;
+    let newVolume = audioPlayer.volume + volumeChange;
+    
+    newVolume = Math.max(0, Math.min(1, newVolume));
+    audioPlayer.volume = newVolume;
+    
+    // Update volume icon
+    if (newVolume === 0) {
+      volumeBtn.innerHTML = '<i class="bx bx-volume-mute"></i>';
+      isMuted = true;
+    } else if (newVolume < 0.5) {
+      volumeBtn.innerHTML = '<i class="bx bx-volume-low"></i>';
+      isMuted = false;
+    } else {
+      volumeBtn.innerHTML = '<i class="bx bx-volume-full"></i>';
+      isMuted = false;
+    }
+    
+    showVolumeIndicator(Math.round(newVolume * 100));
+  }, { passive: false });
+
+  // Double click to minimize/expand
+  let isMinimized = false;
+  playerContainer.addEventListener("dblclick", function () {
+    if (isMinimized) {
+      this.style.transform = 'scale(1)';
+      this.style.opacity = '1';
+      isMinimized = false;
+    } else {
+      this.style.transform = 'scale(0.8)';
+      this.style.opacity = '0.8';
+      isMinimized = true;
+    }
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName.toLowerCase() === 'input' || 
+        e.target.tagName.toLowerCase() === 'textarea') return;
+    
+    switch(e.key.toLowerCase()) {
+      case ' ':
+        e.preventDefault();
+        togglePlayPause();
+        break;
+      case 'm':
+        toggleMute();
+        break;
+      case 'arrowleft':
+        audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 5);
+        break;
+      case 'arrowright':
+        audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 5);
+        break;
+    }
+  });
+
+  // Save and load preferences
+  function savePreferences() {
+    localStorage.setItem('audioVolume', audioPlayer.volume);
+    localStorage.setItem('audioMuted', isMuted);
+  }
+
+  function loadPreferences() {
+    const savedVolume = localStorage.getItem('audioVolume');
+    const savedMuted = localStorage.getItem('audioMuted') === 'true';
+    
+    if (savedVolume) {
+      audioPlayer.volume = parseFloat(savedVolume);
+      currentVolume = audioPlayer.volume;
+    }
+    
+    if (savedMuted) {
+      toggleMute();
+    }
+  }
+
+  audioPlayer.addEventListener('volumechange', savePreferences);
+  loadPreferences();
+
+  // Volume indicator
   function showVolumeIndicator(volume) {
     let indicator = document.querySelector(".volume-indicator");
     if (!indicator) {
       indicator = document.createElement("div");
       indicator.className = "volume-indicator";
       indicator.style.cssText = `
-                position: fixed;
-                bottom: 120px;
-                right: 50px;
-                background: #b71c1c;
-                color: white;
-                padding: 8px 12px;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: 600;
-                z-index: 102;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            `;
+        position: fixed;
+        bottom: 120px;
+        right: 50px;
+        background: linear-gradient(135deg, #b71c1c, #8b0000);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 700;
+        z-index: 102;
+        opacity: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(183, 28, 28, 0.4);
+        border: 2px solid #ffeb3b;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      `;
       document.body.appendChild(indicator);
     }
 
-    indicator.textContent = `🔊 ${volume}%`;
+    indicator.innerHTML = `<i class="bx bx-volume-full"></i> ${volume}%`;
     indicator.style.opacity = "1";
+    indicator.style.transform = "translateY(-10px)";
 
     clearTimeout(indicator.fadeTimeout);
     indicator.fadeTimeout = setTimeout(() => {
       indicator.style.opacity = "0";
+      indicator.style.transform = "translateY(0)";
     }, 1500);
   }
 
-  // Add CSS for playing animation
-  const style = document.createElement("style");
-  style.textContent = `
-        .audio-player-container.playing {
-            animation: audioPlayerPulse 2s infinite;
-        }
-        
-        @keyframes audioPlayerPulse {
-            0%, 100% { 
-                border-color: #b71c1c;
-                box-shadow: 
-                    8px 8px 16px rgba(0, 0, 0, 0.1),
-                    -8px -8px 16px rgba(255, 255, 255, 0.7);
-            }
-            50% { 
-                border-color: #ffeb3b;
-                box-shadow: 
-                    8px 8px 20px rgba(183, 28, 28, 0.2),
-                    -8px -8px 20px rgba(255, 235, 59, 0.2),
-                    0 0 15px rgba(255, 235, 59, 0.3);
-            }
-        }
+  // Audio notification
+  function showAudioNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `audio-notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'error' ? '#f44336' : '#2196f3'};
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      z-index: 103;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     `;
-  document.head.appendChild(style);
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.style.opacity = '1', 100);
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Initialize with a subtle hint
+  setTimeout(() => {
+    if (!isPlaying) {
+      showAudioNotification('Click play to enjoy background music!', 'info');
+    }
+  }, 3000);
 });
