@@ -145,27 +145,27 @@ body {
     z-index: 99;
     overflow-y: auto;
   }
-  
+
   .nav-menu.show {
     right: 0;
   }
-  
+
   .menu-icon {
     display: block;
   }
-  
+
   .menu-toggle:checked ~ .nav-menu {
     right: 0;
   }
-  
+
   .menu-toggle:checked ~ .menu-icon .bx-menu {
     display: none;
   }
-  
+
   .menu-toggle:checked ~ .menu-icon .bx-x {
     display: block;
   }
-  
+
   .nav-link {
     padding: 15px 30px;
     display: block;
@@ -175,7 +175,7 @@ body {
     transition: all 0.3s ease;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   .nav-link:hover,
   .nav-link:active {
     background-color: rgba(255, 255, 255, 0.1);
@@ -920,7 +920,11 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(183, 28, 28, 0.95), rgba(139, 0, 0, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(183, 28, 28, 0.95),
+    rgba(139, 0, 0, 0.95)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1017,16 +1021,16 @@ body {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .portfolio-item {
     height: 250px;
   }
-  
+
   .portfolio-actions {
     flex-direction: column;
     gap: 0.75rem;
   }
-  
+
   .portfolio-btn {
     width: 100%;
     justify-content: center;
@@ -1067,7 +1071,7 @@ body {
   width: 100%;
 }
 
-``` .contact-form-title::before {
+.contact-form-title::before {
   content: "✉";
   position: absolute;
   left: 10px;
@@ -1270,13 +1274,16 @@ body {
 }
 
 .audio-player-container {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
   backdrop-filter: blur(15px);
   border: 2px solid rgba(255, 235, 59, 0.3);
   border-radius: 20px;
   padding: 1.5rem;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   max-width: 320px;
@@ -1285,23 +1292,30 @@ body {
 }
 
 .audio-player-container::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 235, 59, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 235, 59, 0.1),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
 .audio-player-container:hover {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.08)
+  );
   border-color: rgba(255, 235, 59, 0.6);
   transform: translateY(-5px) scale(1.02);
-  box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(255, 235, 59, 0.3),
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 235, 59, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -1322,7 +1336,7 @@ body {
 }
 
 .audio-player-header::before {
-  content: '♪';
+  content: "♪";
   position: absolute;
   left: -20px;
   top: 50%;
@@ -1332,7 +1346,7 @@ body {
 }
 
 .audio-player-header::after {
-  content: '♫';
+  content: "♫";
   position: absolute;
   right: -20px;
   top: 50%;
@@ -1342,7 +1356,8 @@ body {
 }
 
 @keyframes musicNote {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-50%) scale(1);
     opacity: 0.7;
   }
@@ -1448,7 +1463,7 @@ body {
 }
 
 .progress-bar::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -1478,16 +1493,14 @@ audio#bg-music {
 }
 
 @keyframes audioPlayerGlow {
-  0%, 100% {
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
+  0%,
+  100% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   50% {
-    box-shadow: 
-      0 15px 40px rgba(255, 235, 59, 0.3),
-      0 0 30px rgba(255, 235, 59, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 40px rgba(255, 235, 59, 0.3),
+      0 0 30px rgba(255, 235, 59, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -1497,7 +1510,7 @@ audio#bg-music {
     max-width: 280px;
     padding: 1.25rem;
   }
-  
+
   .audio-player-header::before,
   .audio-player-header::after {
     display: none;
@@ -1971,13 +1984,12 @@ audio#bg-music {
 
 /* About Section Styles */
 .profile-summary {
-  display: grid;
   grid-template-columns: 300px 1fr;
   gap: 3rem;
-  align-items: start;
+  align-items: flex-start;
   background: #fff;
   padding: 2rem;
-  border-radius: 15px;
+
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -1988,8 +2000,8 @@ audio#bg-music {
 .profile-image img {
   width: 250px;
   height: 250px;
-  object-fit: cover;
-  border-radius: 15px;
+  object-fit: contain;
+  border-radius: 50%;
   border: 4px solid #b71c1c;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
@@ -1999,6 +2011,8 @@ audio#bg-music {
   margin-bottom: 1rem;
   font-size: 1.5rem;
   font-weight: 700;
+  text-align: center;
+  padding-top: 1rem;
 }
 
 .profile-details p {
@@ -2006,6 +2020,7 @@ audio#bg-music {
   line-height: 1.7;
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
+  padding-top: 1rem;
 }
 
 /* Contact Info */
