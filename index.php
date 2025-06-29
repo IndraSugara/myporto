@@ -64,20 +64,20 @@ try {
                 <p class="hero-description"><?php echo htmlspecialchars($profile['bio']); ?></p>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number">5+</span>
+                        <span class="stat-number">1</span>
                         <span class="stat-label">Tahun Pengalaman</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">50+</span>
+                        <span class="stat-number">5+</span>
                         <span class="stat-label">Proyek Selesai</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">100%</span>
-                        <span class="stat-label">Kepuasan Klien</span>
+                        <span class="stat-label">Proyek Tidak Mangkrak</span>
                     </div>
                 </div>
                 <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">
+                    <a href="contact.php" class="btn btn-primary">
                         <i class="bx bx-phone"></i>
                         Hubungi Saya
                     </a>
@@ -91,15 +91,15 @@ try {
                     </a>
                     <div class="hero-audio-player">
                         <div class="audio-player-container" id="audioPlayerContainer">
-                            <div class="audio-player-header">Great Music</div>
+                            <div class="audio-player-header">Background Music</div>
                             <div class="custom-audio-player">
                                 <div class="audio-controls">
                                     <button class="play-pause-btn" id="playPauseBtn">
                                         <i class="bx bx-play"></i>
                                     </button>
                                     <div class="audio-info">
-                                        <div class="audio-title">Left Vibes</div>
-                                        <div class="audio-artist">Leftish</div>
+                                        <div class="audio-title">Chill Vibes</div>
+                                        <div class="audio-artist">Portfolio Theme</div>
                                     </div>
                                     <button class="volume-control" id="volumeBtn">
                                         <i class="bx bx-volume-full"></i>
@@ -360,4 +360,3 @@ try {
     </section>
 
 <?php include 'footer.php'; ?>
-</replit_final_file>
