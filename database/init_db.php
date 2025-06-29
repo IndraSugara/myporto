@@ -109,7 +109,7 @@ try {
     $stmt->execute();
     if ($stmt->fetchColumn() == 0) {
         $pdo->exec("INSERT INTO profile (name, title, bio, image_url, email, phone, location) VALUES 
-            ('Indra Sugara', 'AI Enthusiast', 
+            ('Indra Sugara', 'An AI Enthusiast (And a History Geek)', 
             'Seorang developer passionate yang berfokus pada inovasi digital dan solusi teknologi modern, saat ini Berfokus dalam pembelajaran web full-stack, AI, dan software developing.', 
             'img/profile.png', 'sughara78@gmail.com', '+62 822-5930-6737', 'Karyamusa, Riau, Indonesia')");
     } else {
