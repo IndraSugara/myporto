@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function toggleMenu() {
       isMenuOpen = !isMenuOpen;
       menuToggle.checked = isMenuOpen;
-
+      
       if (isMenuOpen) {
         navMenu.classList.add("show");
         document.body.style.overflow = "hidden";
@@ -29,13 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Add passive touch handler for better performance
-    menuIcon.addEventListener(
-      "touchstart",
-      function (e) {
-        // Don't prevent default for passive listener
-      },
-      { passive: true }
-    );
+    menuIcon.addEventListener("touchstart", function (e) {
+      // Don't prevent default for passive listener
+    }, { passive: true });
 
     // Handle checkbox change (fallback)
     menuToggle.addEventListener("change", function () {
@@ -62,11 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Close menu when clicking outside
     document.addEventListener("click", function (e) {
-      if (
-        isMenuOpen &&
-        !navMenu.contains(e.target) &&
-        !menuIcon.contains(e.target)
-      ) {
+      if (isMenuOpen && !navMenu.contains(e.target) && !menuIcon.contains(e.target)) {
         isMenuOpen = false;
         menuToggle.checked = false;
         navMenu.classList.remove("show");
@@ -189,43 +181,33 @@ document.addEventListener("DOMContentLoaded", function () {
   // Header scroll effect
   const header = document.querySelector(".header");
   let lastScrollTop = 0;
-  window.addEventListener(
-    "scroll",
-    () => {
-      const top = window.pageYOffset || document.documentElement.scrollTop;
-      header?.classList.toggle("scrolled", top > 100);
-      header.style.transform =
-        top > lastScrollTop && top > 200
-          ? "translateY(-100%)"
-          : "translateY(0)";
-      lastScrollTop = Math.max(0, top);
-    },
-    { passive: true }
-  );
+  window.addEventListener("scroll", () => {
+    const top = window.pageYOffset || document.documentElement.scrollTop;
+    header?.classList.toggle("scrolled", top > 100);
+    header.style.transform =
+      top > lastScrollTop && top > 200 ? "translateY(-100%)" : "translateY(0)";
+    lastScrollTop = Math.max(0, top);
+  }, { passive: true });
 
   // Highlight active nav
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-link");
-  window.addEventListener(
-    "scroll",
-    () => {
-      const pos = window.scrollY + 100;
-      sections.forEach((sec) => {
-        const top = sec.offsetTop;
-        const bottom = top + sec.offsetHeight;
-        const id = sec.getAttribute("id");
-        if (pos >= top && pos < bottom) {
-          navLinks.forEach((link) => {
-            link.classList.toggle(
-              "active",
-              link.getAttribute("href") === `#${id}`
-            );
-          });
-        }
-      });
-    },
-    { passive: true }
-  );
+  window.addEventListener("scroll", () => {
+    const pos = window.scrollY + 100;
+    sections.forEach((sec) => {
+      const top = sec.offsetTop;
+      const bottom = top + sec.offsetHeight;
+      const id = sec.getAttribute("id");
+      if (pos >= top && pos < bottom) {
+        navLinks.forEach((link) => {
+          link.classList.toggle(
+            "active",
+            link.getAttribute("href") === `#${id}`
+          );
+        });
+      }
+    });
+  }, { passive: true });
 
   // Animate cards
   const animatedCards = document.querySelectorAll(
@@ -335,4 +317,61 @@ document.addEventListener("DOMContentLoaded", function () {
       mobileBtn?.classList.remove("active");
     });
   });
+
+  // Portfolio item click functionality
+  document.querySelectorAll(".portfolio-item").forEach((item) => {
+    item.addEventListener("click", function(e) {
+      // Don't trigger if clicking on action buttons
+      if (e.target.closest('.portfolio-btn')) {
+        return;
+      }
+      
+      const projectUrl = this.getAttribute("data-project-url");
+      const githubUrl = this.getAttribute("data-github-url");
+      
+      // Priority: project URL first, then GitHub URL
+      if (projectUrl && projectUrl !== '#') {
+        window.open(projectUrl, '_blank');
+      } else if (githubUrl && githubUrl !== '#') {
+        window.open(githubUrl, '_blank');
+      } else {
+        // Show notification if no links available
+        showNotification("Link project belum tersedia", "info");
+      }
+    });
+    
+    // Add hover sound effect (optional)
+    item.addEventListener("mouseenter", function() {
+      // Add subtle animation class
+      this.classList.add("portfolio-hover");
+    });
+    
+    item.addEventListener("mouseleave", function() {
+      this.classList.remove("portfolio-hover");
+    });
+  });
+
+  // Enhanced notification function with more types
+  function showNotification(message, type = "success") {
+    const notif = document.createElement("div");
+    notif.className = `notification ${type}`;
+    notif.textContent = message;
+    
+    // Add icon based on type
+    let icon = "";
+    switch(type) {
+      case "success": icon = "✓ "; break;
+      case "error": icon = "✗ "; break;
+      case "info": icon = "ℹ "; break;
+      default: icon = "";
+    }
+    notif.textContent = icon + message;
+    
+    document.body.appendChild(notif);
+    setTimeout(() => notif.classList.add("show"), 100);
+    setTimeout(() => {
+      notif.classList.remove("show");
+      setTimeout(() => notif.remove(), 300);
+    }, 3000);
+  }
 });
